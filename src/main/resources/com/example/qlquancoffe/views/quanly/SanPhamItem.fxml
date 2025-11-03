@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.qlquancoffe.controllers.SanPhamItemController"
+      spacing="15"
+      style="-fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;">
+
+    <!-- Ảnh sản phẩm -->
+    <ImageView fx:id="imgSanPham"
+               fitWidth="100" fitHeight="100"
+               preserveRatio="true"
+               style="-fx-border-radius: 8;"/>
+
+    <!-- Thông tin sản phẩm -->
+    <VBox alignment="CENTER_LEFT" spacing="5">
+        <Label fx:id="lblTenSanPham" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <Label fx:id="lblGiaBan" style="-fx-text-fill: #27ae60;"/>
+        <Label fx:id="lblDanhMuc" style="-fx-text-fill: gray;"/>
+        <Label fx:id="lblSoLuong"/>
+        <Label fx:id="lblTrangThai" style="-fx-font-style: italic;"/>
+    </VBox>
+</HBox>

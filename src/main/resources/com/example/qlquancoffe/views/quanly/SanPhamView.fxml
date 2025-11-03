@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.qlquancoffe.controllers.SanPhamController">
+
+    <!-- Tiêu đề -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-padding: 10; -fx-background-color: #f4f4f4;">
+            <Label text="📦 Quản lý sản phẩm"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="txtSearch" promptText="Tìm kiếm sản phẩm..." onKeyReleased="#onSearch"/>
+            <Button text="Thêm" onAction="#onAdd"/>
+            <Button text="Sửa" onAction="#onEdit"/>
+            <Button text="Xóa" onAction="#onDelete"/>
+        </HBox>
+    </top>
+
+    <!-- Tabs danh mục -->
+    <center>
+        <TabPane fx:id="tabPaneDanhMuc" tabClosingPolicy="UNAVAILABLE">
+            <!-- ⚠️ Các tab sẽ được thêm động bằng code Java -->
+        </TabPane>
+    </center>
+
+    <!-- Form nhập -->
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" prefWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Tên sản phẩm:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtTenSanPham" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Giá bán:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtGiaBan" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Tồn kho:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtSoLuong" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Danh mục:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="cbDanhMuc" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Ảnh sản phẩm:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                    <TextField fx:id="txtAnhSanPham" promptText="Đường dẫn ảnh" prefWidth="300"/>
+                    <Button text="Chọn ảnh" onAction="#onChooseImage"/>
+                </HBox>
+            </GridPane>
+        </VBox>
+    </bottom>
+</BorderPane>
