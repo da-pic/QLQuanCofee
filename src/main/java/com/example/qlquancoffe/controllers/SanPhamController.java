@@ -20,17 +20,19 @@ public class SanPhamController {
 
     @FXML private TabPane tabPaneDanhMuc;
     @FXML private TextField txtTenSanPham, txtGiaBan, txtSoLuong, txtSearch, txtAnhSanPham;
+    @FXML private Label lblDanhMucHienTai;
 
     private final SanPhamDAO sanPhamDAO = new SanPhamDAO();
     private final DanhMucDAO danhMucDAO = new DanhMucDAO();
     private ObservableList<DanhMuc> dsDanhMuc;
 
-    // <-- Lưu ID sản phẩm đang được chọn (null nếu chưa chọn)
+    // Lưu ID sản phẩm đang được chọn
     private Integer selectedSanPhamId = null;
 
     @FXML
     public void initialize() {
         loadTabsDanhMuc();
+        capNhatDanhMucTheoTab();
     }
 
     /**
@@ -39,7 +41,7 @@ public class SanPhamController {
     private void loadTabsDanhMuc() {
         tabPaneDanhMuc.getTabs().clear();
         dsDanhMuc = danhMucDAO.getAllDanhMuc();
-        selectedSanPhamId = null; // reset khi load lại
+        selectedSanPhamId = null;
 
         for (DanhMuc dm : dsDanhMuc) {
             Tab tab = new Tab(dm.getTenDanhMuc());
@@ -48,20 +50,41 @@ public class SanPhamController {
             tabPaneDanhMuc.getTabs().add(tab);
         }
 
-        // Khi người dùng chuyển tab -> nạp lại danh sách
+        // Khi người dùng đổi tab
         tabPaneDanhMuc.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null) {
                 int index = tabPaneDanhMuc.getTabs().indexOf(newTab);
                 if (index >= 0 && index < dsDanhMuc.size()) {
-                    int idDM = dsDanhMuc.get(index).getIdDanhMuc();
-                    newTab.setContent(taoDanhSachSanPham(idDM));
+                    DanhMuc dm = dsDanhMuc.get(index);
+                    lblDanhMucHienTai.setText(dm.getTenDanhMuc()); // ✅ Cập nhật Label danh mục
+                    newTab.setContent(taoDanhSachSanPham(dm.getIdDanhMuc()));
                 }
             }
         });
+
+        // Ban đầu hiển thị danh mục đầu tiên
+        if (!dsDanhMuc.isEmpty()) {
+            lblDanhMucHienTai.setText(dsDanhMuc.get(0).getTenDanhMuc());
+        }
     }
 
     /**
-     * Hiển thị danh sách sản phẩm dạng thẻ (ảnh trái, thông tin phải)
+     * Đồng bộ Label danh mục theo tab hiện tại
+     */
+    private void capNhatDanhMucTheoTab() {
+        if (tabPaneDanhMuc.getTabs().isEmpty()) {
+            lblDanhMucHienTai.setText("Chưa có danh mục");
+            return;
+        }
+        Tab currentTab = tabPaneDanhMuc.getSelectionModel().getSelectedItem();
+        if (currentTab != null) {
+            int index = tabPaneDanhMuc.getTabs().indexOf(currentTab);
+            lblDanhMucHienTai.setText(dsDanhMuc.get(index).getTenDanhMuc());
+        }
+    }
+
+    /**
+     * Hiển thị danh sách sản phẩm dạng thẻ
      */
     private ScrollPane taoDanhSachSanPham(int idDanhMuc) {
         ObservableList<SanPham> dsSanPham = sanPhamDAO.getSanPhamByDanhMuc(idDanhMuc);
@@ -79,7 +102,7 @@ public class SanPhamController {
                 SanPhamItemController itemCtrl = loader.getController();
                 itemCtrl.setData(sp);
 
-                // Click vào thẻ -> đổ dữ liệu lên form và lưu selectedSanPhamId
+                // Click vào thẻ
                 card.setOnMouseClicked(e -> {
                     selectedSanPhamId = sp.getIdSanPham();
                     txtTenSanPham.setText(sp.getTenSanPham());
@@ -100,7 +123,7 @@ public class SanPhamController {
         return scroll;
     }
 
-    // ===================== Chức năng tìm kiếm =====================
+    // ===================== Tìm kiếm =====================
     @FXML
     private void onSearch() {
         String keyword = txtSearch.getText().trim();
@@ -116,6 +139,7 @@ public class SanPhamController {
 
         FlowPane flow = new FlowPane(15, 15);
         flow.setPadding(new Insets(10));
+
         for (SanPham sp : ketQua) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/qlquancoffe/views/quanly/SanPhamItem.fxml"));
@@ -123,7 +147,6 @@ public class SanPhamController {
                 SanPhamItemController itemCtrl = loader.getController();
                 itemCtrl.setData(sp);
 
-                // khi filter, cũng phải gán listener để cập nhật selectedSanPhamId
                 card.setOnMouseClicked(e -> {
                     selectedSanPhamId = sp.getIdSanPham();
                     txtTenSanPham.setText(sp.getTenSanPham());
@@ -143,7 +166,7 @@ public class SanPhamController {
         currentTab.setContent(scroll);
     }
 
-    // ===================== Chức năng thêm =====================
+    // ===================== Thêm =====================
     @FXML
     private void onAdd() {
         try {
@@ -168,7 +191,7 @@ public class SanPhamController {
                 showAlert("Sản phẩm đã tồn tại!", Alert.AlertType.INFORMATION);
             } else if (sanPhamDAO.addSanPham(sp)) {
                 showAlert("Thêm thành công!", Alert.AlertType.INFORMATION);
-                selectedSanPhamId = sp.getIdSanPham(); // chọn sản phẩm mới
+                selectedSanPhamId = sp.getIdSanPham();
                 loadTabsDanhMuc();
             }
         } catch (Exception e) {
@@ -176,7 +199,7 @@ public class SanPhamController {
         }
     }
 
-    // ===================== Chức năng sửa =====================
+    // ===================== Sửa =====================
     @FXML
     private void onEdit() {
         try {
@@ -187,7 +210,7 @@ public class SanPhamController {
 
             SanPham sp = sanPhamDAO.getSanPhamById(selectedSanPhamId);
             if (sp == null) {
-                showAlert("Không tìm thấy sản phẩm (ID=" + selectedSanPhamId + ")", Alert.AlertType.ERROR);
+                showAlert("Không tìm thấy sản phẩm!", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -205,11 +228,10 @@ public class SanPhamController {
 
         } catch (Exception e) {
             showAlert("Lỗi cập nhật: " + e.getMessage(), Alert.AlertType.ERROR);
-            e.printStackTrace();
         }
     }
 
-    // ===================== Chức năng xóa =====================
+    // ===================== Xóa =====================
     @FXML
     private void onDelete() {
         try {
@@ -240,7 +262,6 @@ public class SanPhamController {
             }
         } catch (Exception e) {
             showAlert("Lỗi khi xóa: " + e.getMessage(), Alert.AlertType.ERROR);
-            e.printStackTrace();
         }
     }
 
@@ -263,4 +284,26 @@ public class SanPhamController {
     private void showAlert(String msg, Alert.AlertType type) {
         new Alert(type, msg).showAndWait();
     }
+
+    // Làm mới form
+    @FXML
+    private void onReload() {
+        clearForm();
+    }
+
+    private void clearForm() {
+        // Xóa toàn bộ nội dung ở các ô nhập liệu
+        txtTenSanPham.clear();
+        txtGiaBan.clear();
+        txtSoLuong.clear();
+        txtAnhSanPham.clear();
+        txtSearch.clear();
+
+        // Bỏ chọn sản phẩm hiện tại
+        selectedSanPhamId = null;
+
+        // Làm mới nội dung danh sách sản phẩm
+        loadTabsDanhMuc();
+    }
 }
+

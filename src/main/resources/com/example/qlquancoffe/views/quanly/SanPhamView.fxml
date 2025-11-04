@@ -6,8 +6,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.qlquancoffe.controllers.SanPhamController">
-
+            fx:controller="com.example.qlquancoffe.controllers.SanPhamController"
+            stylesheets="@../../css/SanPhamStyles.css">
     <!-- Tiêu đề -->
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT"
@@ -19,6 +19,7 @@
             <Button text="Thêm" onAction="#onAdd"/>
             <Button text="Sửa" onAction="#onEdit"/>
             <Button text="Xóa" onAction="#onDelete"/>
+            <Button text="Làm mới form" onAction="#onReload"/>
         </HBox>
     </top>
 
@@ -52,7 +53,8 @@
                 <TextField fx:id="txtSoLuong" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
                 <Label text="Danh mục:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="cbDanhMuc" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Label fx:id="lblDanhMucHienTai" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                       style="-fx-font-weight: bold; -fx-text-fill: #333;" />
 
                 <Label text="Ảnh sản phẩm:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                 <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">

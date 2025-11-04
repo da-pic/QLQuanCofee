@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21.0.1"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.qlquancoffe.controllers.NhanVienController"
+            stylesheets="@../../css/NhanVienStyles.css"
+            prefWidth="1100" prefHeight="650">
+
+    <SplitPane dividerPositions="0.6" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- =============== CỘT TRÁI: DANH SÁCH TÀI KHOẢN =============== -->
+        <AnchorPane>
+            <VBox spacing="10" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                  AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="Danh sách tài khoản" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Tìm kiếm:"/>
+                    <TextField fx:id="txtSearch" promptText="Nhập tên hoặc tài khoản..."
+                               onKeyReleased="#onSearch" prefWidth="250"/>
+                </HBox>
+
+                <TableView fx:id="tableTaiKhoan" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colHoTen" text="Họ tên" prefWidth="150"/>
+                        <TableColumn fx:id="colTenDangNhap" text="Tên đăng nhập" prefWidth="150"/>
+                        <TableColumn fx:id="colVaiTro" text="Vai trò" prefWidth="100"/>
+                        <TableColumn fx:id="colTrangThai" text="Trạng thái" prefWidth="120"/>
+                        <TableColumn fx:id="colNgayTao" text="Ngày tạo" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </AnchorPane>
+
+        <!-- =============== CỘT PHẢI: FORM NHẬP & CHỨC NĂNG =============== -->
+        <AnchorPane>
+            <VBox spacing="20" alignment="TOP_CENTER"
+                  AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                  AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                <padding>
+                    <Insets top="25" right="25" bottom="25" left="25"/>
+                </padding>
+
+                <Label text="Thông tin tài khoản" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                <!-- FORM NHẬP LIỆU -->
+                <GridPane hgap="15" vgap="15" alignment="CENTER_LEFT">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" prefWidth="120"/>
+                        <ColumnConstraints halignment="LEFT" prefWidth="250"/>
+                    </columnConstraints>
+
+                    <rowConstraints>
+                        <RowConstraints minHeight="30"/>
+                        <RowConstraints minHeight="30"/>
+                        <RowConstraints minHeight="30"/>
+                        <RowConstraints minHeight="30"/>
+                        <RowConstraints minHeight="30"/>
+                    </rowConstraints>
+
+                    <Label text="Họ tên:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtHoTen" promptText="Nhập họ tên"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Tên đăng nhập:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtTenDangNhap" promptText="Tên đăng nhập"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Mật khẩu:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="txtMatKhau" promptText="Nhập mật khẩu"
+                                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="Vai trò:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="cbVaiTro" prefWidth="250"
+                              GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="Trạng thái:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <ComboBox fx:id="cbTrangThai" prefWidth="250"
+                              GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                </GridPane>
+
+                <!-- CÁC NÚT CHỨC NĂNG -->
+                <HBox spacing="12" alignment="CENTER">
+                    <Button fx:id="btnThem" text="Thêm" onAction="#onAdd"
+                            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    <Button fx:id="btnSua" text="Sửa" onAction="#onEdit"
+                            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    <Button fx:id="btnXoa" text="Xóa" onAction="#onDelete"
+                            style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+                </HBox>
+
+                <HBox spacing="12" alignment="CENTER">
+                    <Button fx:id="btnLamMoi" text="Làm mới" onAction="#onReload"
+                            style="-fx-background-color: #9E9E9E; -fx-text-fill: white;"/>
+                </HBox>
+            </VBox>
+        </AnchorPane>
+    </SplitPane>
+</AnchorPane>
